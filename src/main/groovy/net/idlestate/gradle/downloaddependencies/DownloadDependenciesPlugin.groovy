@@ -54,9 +54,11 @@ class DownloadDependenciesPlugin implements Plugin<Project> {
             project.tasks[ CLEANUP_LOCAL_REPOSITORY_TASK ].localRepository = project.file( DownloadDependenciesUtils.getTemporaryDirectory() )
         }
 
+        final def rootRepositories = project.allprojects.getAt(0).repositories.collect()
+
         project.allprojects {
             // Create backup of defined repositories
-            final def definedRepositories = it.repositories.collect()
+//            final def definedRepositories = it.repositories.collect()
 
             File repository = getLocalRepository( project )
 
@@ -83,7 +85,7 @@ class DownloadDependenciesPlugin implements Plugin<Project> {
                 if ( taskGraph.hasTask( ":${DOWNLOAD_DEPENDENCIES_TASK}" ) ) {
                     it.logger.info( "Replacing local repository in ${it.name} with defined repositories" )
 
-                    it.repositories.addAll( definedRepositories )
+                    it.repositories.addAll( rootRepositories )
                 }
             }
         }

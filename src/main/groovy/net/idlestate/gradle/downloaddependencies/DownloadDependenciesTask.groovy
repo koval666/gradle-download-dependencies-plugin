@@ -18,11 +18,11 @@ package net.idlestate.gradle.downloaddependencies
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ModuleIdentifier
+import org.gradle.api.artifacts.repositories.PasswordCredentials
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
-
 import org.gradle.jvm.JvmLibrary
 import org.gradle.language.base.artifact.SourcesArtifact
 import org.gradle.language.java.artifact.JavadocArtifact
@@ -229,12 +229,16 @@ class DownloadDependenciesTask extends DefaultTask {
                 File localPomFile = new File( tempDir, fileName )
                 localPomFile.deleteOnExit()
 
+                Authenticator.setDefault(createAuthenticator(repository.credentials))
+
                 try {
                     localPomFile.withOutputStream { os ->
                         url.withInputStream { is ->
                             os << is
                         }
                     }
+
+                    Authenticator.setDefault(null)
 
                     copyArtifactFileToRepository( id, localPomFile )
                     resolveParents( localPomFile )
@@ -254,6 +258,16 @@ class DownloadDependenciesTask extends DefaultTask {
 
         if ( !found ) {
             logger.warn( "Unable to find pom file of ${id.displayName}" )
+        }
+    }
+
+    Authenticator createAuthenticator(PasswordCredentials credentials) {
+        new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                new PasswordAuthentication(credentials.username, credentials.password.toCharArray())
+            }
+
         }
     }
 

@@ -61,21 +61,21 @@ publishing {
     }
 }
 
-bintray {
-    // Define in ~/.gradle/gradle.properties or as project property on startup
-    user = bintray_user
-    key = bintray_api_key
-
-    publications = [ 'gradlePlugin' ]
-
-    pkg {
-        repo = 'maven'
-        name = archivesBaseName
-        licenses = [ 'Apache-2.0' ]
-        vcsUrl = 'https://github.com/tehlers/gradle-download-dependencies-plugin.git'
-        version {
-            name = project.version
-            desc = 'A Gradle plugin that downloads the dependencies of a Java project into a local repository that follows the maven structure'
-        }
-    }
-}
+//bintray {
+//    // Define in ~/.gradle/gradle.properties or as project property on startup
+//    user = bintray_user
+//    key = bintray_api_key
+//
+//    publications = [ 'gradlePlugin' ]
+//
+//    pkg {
+//        repo = 'maven'
+//        name = archivesBaseName
+//        licenses = [ 'Apache-2.0' ]
+//        vcsUrl = 'https://github.com/tehlers/gradle-download-dependencies-plugin.git'
+//        version {
+//            name = project.version
+//            desc = 'A Gradle plugin that downloads the dependencies of a Java project into a local repository that follows the maven structure'
+//        }
+//    }
+//}
